@@ -39,9 +39,25 @@ namespace EmbroidaryManagementSystem.Controllers
         */
         // POST api/<LoginController>
         [HttpPost]
-        public async Task<ActionResult<EmployeeTb>> PostLogin(UserTb userTb)
+        public async Task<ActionResult<String>> PostLogin(string username, string password)
         {
-            
+            try
+            {
+                var login = await _context.UserTb.FindAsync(username, password);
+                if(login == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return login.Username;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         /*
