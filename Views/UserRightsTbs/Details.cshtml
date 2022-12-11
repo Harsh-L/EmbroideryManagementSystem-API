@@ -1,0 +1,30 @@
+﻿@model EmbroidaryManagementSystem.Models.UserRightsTb
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>UserRightsTb</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ModuleId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ModuleId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.UserRightsId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

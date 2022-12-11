@@ -1,0 +1,77 @@
+﻿@model IEnumerable<EmbroidaryManagementSystem.Models.PartyAccountTb>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gstno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Aline1)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Aline2)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pincode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StateCountry)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Type)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gstno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aline1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Aline2)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pincode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StateCountry)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PaId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PaId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PaId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

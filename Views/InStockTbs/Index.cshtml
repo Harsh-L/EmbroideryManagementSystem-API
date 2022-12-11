@@ -1,0 +1,89 @@
+﻿@model IEnumerable<EmbroidaryManagementSystem.Models.InStockTb>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ChallNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gstno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Discount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sgst)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cgst)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Igst)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalAmount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pa)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChallNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gstno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Discount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sgst)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cgst)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Igst)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalAmount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pa.PaId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.InStockId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.InStockId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.InStockId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
