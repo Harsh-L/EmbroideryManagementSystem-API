@@ -16,7 +16,7 @@ namespace EmbroidaryManagementSystem.Controllers
     public class LoginController : ControllerBase
     {
         private readonly EmbroidaryManagementSystemContext _context;
-
+        
         public LoginController(EmbroidaryManagementSystemContext context)
         {
             _context = context;
@@ -44,6 +44,7 @@ namespace EmbroidaryManagementSystem.Controllers
             try
             {
                 var login = await _context.UserTb.FindAsync(username, password);
+                
                 if(login == null)
                 {
                     return NotFound();
