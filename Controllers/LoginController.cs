@@ -51,6 +51,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
                 else
                 {
+                    HttpContext.Session.SetString("user", login.UId.ToString());
                     return login.Username;
                 }
             }
