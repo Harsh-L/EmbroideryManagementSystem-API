@@ -15,6 +15,7 @@ namespace EmbroidaryManagementSystem.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
+        
         private readonly EmbroidaryManagementSystemContext _context;
         
         public LoginController(EmbroidaryManagementSystemContext context)
@@ -50,8 +51,10 @@ namespace EmbroidaryManagementSystem.Controllers
                     return NotFound();
                 }
                 else
-                {
+                {                   
                     HttpContext.Session.SetString("user", login.UId.ToString());
+                    
+
                     return login.Username;
                 }
             }
