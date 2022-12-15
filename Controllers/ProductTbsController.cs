@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using EmbroidaryManagementSystem.Models;
+using System.Collections;
 
 namespace EmbroidaryManagementSystem.Controllers
 {
@@ -46,7 +47,8 @@ namespace EmbroidaryManagementSystem.Controllers
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProductTb(int id, ProductTb productTb)
-        {
+        {   
+            
             if (id != productTb.PdId)
             {
                 return BadRequest();
