@@ -20,19 +20,23 @@ namespace EmbroidaryManagementSystem.Controllers
     {
         
         private readonly EmbroidaryManagementSystemContext _context;
-        
-        public LoginController(EmbroidaryManagementSystemContext context)
+        private IConfiguration _configuration;
+        public LoginController(EmbroidaryManagementSystemContext context, IConfiguration configuration)
         {
+            _configuration = configuration;
             _context = context;
         }
-        
-        // GET: api/<LoginController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
 
+        // GET: api/<LoginController>
+        //[HttpGet]
+        //public IEnumerable<string> Get()
+        //{
+        //    return new string[] { "value1", "value2" };
+        //}
+        [HttpGet]
+        public void Get()
+        {
+        }
         /*
         // GET api/<LoginController>/5
         [HttpGet("{id}")]
@@ -41,28 +45,30 @@ namespace EmbroidaryManagementSystem.Controllers
             return "value";
         }
         */
-        private IConfiguration _configuration;
-        public LoginController(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
+
+        //public LoginController(IConfiguration configuration)
+        //{
+        //    _configuration = configuration;
+        //}
 
         // POST api/<LoginController>
         [HttpPost]
-        public async Task<IActionResult> PostLogin(string username, string password)
+        public async Task<ActionResult> PostLogin([FromBody]UserTb user)
         {
             try
             {
-                var login = await _context.UserTb.FindAsync(username, password);
-                
-                if(login == null)
+                var login = from u in _context.UserTb
+                            where u.Username == user.Username & u.Password == user.Password
+                            select u;
+                //var login = await _context.UserTb.FindAsync(user);
+
+                if (login == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    var token = new TokenOperations(_configuration).CreateToken(login.Username);
-                    //return token != null ? Ok(token) : BadRequest();
+                    var token = new TokenOperations(_configuration).CreateToken(user.Username);
                     if(token != null)
                     {
                         return Ok(token);
@@ -87,7 +93,10 @@ namespace EmbroidaryManagementSystem.Controllers
         {
             var token = HttpContext.Request.Headers["Authorization"];
             var username = new TokenOperations(_configuration).DecodeToken(token);
-            var user = await _context.UserTb.FindAsync(username);
+            var user = from u in _context.UserTb
+                       where u.Username == username
+                       select u.Username;
+            //var user = await _context.UserTb.FindAsync(username);
             //var user = _userList.FirstOrDefault(x => x.Email == email);
             //return user != null ? Ok(user) : BadRequest();
             if (user != null)
