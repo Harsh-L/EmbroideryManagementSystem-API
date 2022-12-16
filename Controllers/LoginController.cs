@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using EmbroidaryManagementSystem.Models;
+using EmbroidaryManagementSystem.Methods;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,7 +25,7 @@ namespace EmbroidaryManagementSystem.Controllers
         {
             _context = context;
         }
-
+        
         // GET: api/<LoginController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -38,9 +41,15 @@ namespace EmbroidaryManagementSystem.Controllers
             return "value";
         }
         */
+        private IConfiguration _configuration;
+        public LoginController(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
+
         // POST api/<LoginController>
         [HttpPost]
-        public async Task<ActionResult<String>> PostLogin(string username, string password)
+        public async Task<IActionResult> PostLogin(string username, string password)
         {
             try
             {
@@ -51,11 +60,18 @@ namespace EmbroidaryManagementSystem.Controllers
                     return NotFound();
                 }
                 else
-                {                   
-                    HttpContext.Session.SetString("user", login.UId.ToString());
-                    
-
-                    return login.Username;
+                {
+                    var token = new TokenOperations(_configuration).CreateToken(login.Username);
+                    //return token != null ? Ok(token) : BadRequest();
+                    if(token != null)
+                    {
+                        return Ok(token);
+                    }
+                    else
+                    {
+                        return BadRequest();
+                    }
+                    //return login.Username;
                 }
             }
             catch (Exception)
@@ -65,6 +81,24 @@ namespace EmbroidaryManagementSystem.Controllers
             }
         }
 
+        [HttpGet("getUser")]
+        [Authorize]
+        public async Task<IActionResult> GetUserAsync()
+        {
+            var token = HttpContext.Request.Headers["Authorization"];
+            var username = new TokenOperations(_configuration).DecodeToken(token);
+            var user = await _context.UserTb.FindAsync(username);
+            //var user = _userList.FirstOrDefault(x => x.Email == email);
+            //return user != null ? Ok(user) : BadRequest();
+            if (user != null)
+            {
+                return Ok(token);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
         /*
         // PUT api/<LoginController>/5
         [HttpPut("{id}")]
