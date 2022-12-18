@@ -73,21 +73,21 @@ namespace EmbroidaryManagementSystem.Controllers
                 var functions = (from m in _context.ModuleMasterTb
                             join u in _context.UserRightsTb on m.ModuleId
                             equals u.ModuleId
-                            select new { user.Username,m.Insert, m.Update, m.Delete, m.View }).ToList();
+                            select new { user.Username, m.Insert, m.Update, m.Delete, m.View }).ToList();
 
                 //HttpContext.Request.Headers["Permissions"] = functions[0].ToString();
-                
-                
+                var userData = functions[0].ToString();
+
                 //Response.Headers.Add("Permissions", functions[0].ToString());
-                
+
                 if (login == null)
                 {
                     return NotFound();
                 }
                 else
                 {
-                    var token = new TokenOperations(_configuration).CreateToken(user.Username);
-                    //var token = new TokenOperations(_configuration).CreateToken(functions[0].ToString());
+                    //var token = new TokenOperations(_configuration).CreateToken(user.Username);
+                    var token = new TokenOperations(_configuration).CreateToken(userData);
                     if (token != null)
                     {
                         return Ok(token);

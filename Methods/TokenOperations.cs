@@ -47,13 +47,13 @@ namespace EmbroidaryManagementSystem.Methods
 
         public string DecodeToken(string token)
         {
-            var tokenClaimUsername = string.Empty;
+            var tokenClaimUser = string.Empty;
             var handler = new JwtSecurityTokenHandler();
             if (handler.ReadToken(token.Substring(7)) is JwtSecurityToken jwtToken)
             {
-                tokenClaimUsername = jwtToken.Claims.First(claim => claim.Type == "Username").Value;
+                tokenClaimUser = jwtToken.Claims.First(claim => claim.Type == "User").Value;
             }
-            return tokenClaimUsername;
+            return tokenClaimUser;
         }
 
     }
