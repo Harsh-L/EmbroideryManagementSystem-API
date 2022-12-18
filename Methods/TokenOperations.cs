@@ -50,11 +50,11 @@ namespace EmbroidaryManagementSystem.Methods
             return tokenString;
         }
 
-        public string DecodeToken(string token)
+        public string DecodeToken(object token)
         {
             var tokenClaimUser = string.Empty;
             var handler = new JwtSecurityTokenHandler();
-            if (handler.ReadToken(token.Substring(7)) is JwtSecurityToken jwtToken)
+            if (handler.ReadToken(token.ToString()) is JwtSecurityToken jwtToken)
             {
                 tokenClaimUser = jwtToken.Claims.First(claim => claim.Type == "User").Value;
             }

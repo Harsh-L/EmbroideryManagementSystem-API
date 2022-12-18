@@ -68,23 +68,13 @@ namespace EmbroidaryManagementSystem.Controllers
                 var login = from u in _context.UserTb
                             where u.Username == user.Username & u.Password == user.Password
                             select new { u.Username, u.UserRightsId };
-                //var login = await _context.UserTb.FindAsync(user);
-
-                //var modId = from m in _context.UserRightsTb
-                //            where m.UserRightsId is login.UserRightsId
-                //            select m;
                 
-
                 var functions = (from m in _context.ModuleMasterTb
                             join u in _context.UserRightsTb on m.ModuleId
                             equals u.ModuleId
                             select new { user.Username, m.Insert, m.Update, m.Delete, m.View }).ToList();
 
-
                 var json_data = System.Text.Json.JsonSerializer.Serialize(functions[0]);
-                //HttpContext.Request.Headers["Permissions"] = functions[0].ToString();
-                
-                //Response.Headers.Add("Permissions", functions[0].ToString());
 
                 if (login == null)
                 {
@@ -117,13 +107,13 @@ namespace EmbroidaryManagementSystem.Controllers
         //public async Task<IActionResult> GetUserAsync()
         //{
         //    var token = HttpContext.Request.Headers["Authorization"];
-            
+
         //    var username = new TokenOperations(_configuration).DecodeToken(token);
         //    var data = username;
         //    var user = from u in _context.UserTb
         //               where u.Username == username
         //               select u.Username;
-            
+
 
         //    if (user != null)
         //    {
