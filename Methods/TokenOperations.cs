@@ -21,7 +21,7 @@ namespace EmbroidaryManagementSystem.Methods
             _configuration = configuration;
         }
 
-        public string CreateToken(string username)
+        public string CreateToken(object data)
         {
             jwtSettings jwt_settings = _configuration.GetSection("JWT").Get<jwtSettings>();
             var key = Encoding.ASCII.GetBytes(jwt_settings.SecurityKey);
@@ -34,7 +34,12 @@ namespace EmbroidaryManagementSystem.Methods
                 Issuer = jwt_settings.Issuer,
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim("Username", username),
+                    new Claim("Data", data.ToString())
+                    //new Claim("Data", data.Username.ToString()),
+                    //new Claim("Data", data.ToString()),
+                    //new Claim("Data", data.ToString()),
+                    //new Claim("Data", data.ToString()),
+                    //new Claim("Data", data.ToString())
                 }),
                 Expires = expiresTime,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),

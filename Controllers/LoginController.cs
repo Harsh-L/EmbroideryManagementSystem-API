@@ -13,6 +13,9 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.IO;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
+using System.Text.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -54,7 +57,7 @@ namespace EmbroidaryManagementSystem.Controllers
         //{
         //    _configuration = configuration;
         //}
-
+        
         // POST api/<LoginController>
         [HttpPost]
         public async Task<ActionResult> PostLogin([FromBody]UserTb user)
@@ -77,6 +80,8 @@ namespace EmbroidaryManagementSystem.Controllers
                             equals u.ModuleId
                             select new { user.Username, m.Insert, m.Update, m.Delete, m.View }).ToList();
 
+
+                var json_data = System.Text.Json.JsonSerializer.Serialize(functions[0]);
                 //HttpContext.Request.Headers["Permissions"] = functions[0].ToString();
                 
                 //Response.Headers.Add("Permissions", functions[0].ToString());
@@ -88,7 +93,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 else
                 {
                     //var token = new TokenOperations(_configuration).CreateToken(user.Username);
-                    var token = new TokenOperations(_configuration).CreateToken(functions[0].ToString());
+                    var token = new TokenOperations(_configuration).CreateToken(json_data);
                     if (token != null)
                     {
                         return Ok(token);
@@ -97,7 +102,6 @@ namespace EmbroidaryManagementSystem.Controllers
                     {
                         return BadRequest();
                     }
-                    //return login.Username;
                 }
             }
             catch (Exception)
@@ -107,28 +111,31 @@ namespace EmbroidaryManagementSystem.Controllers
             }
         }
 
-        [HttpGet("getUser")]
-        [Authorize]
-        public async Task<IActionResult> GetUserAsync()
-        {
-            var token = HttpContext.Request.Headers["Authorization"];
+        // Not Working / Not needed now
+        //[HttpGet("getUser")]
+        //[Authorize]
+        //public async Task<IActionResult> GetUserAsync()
+        //{
+        //    var token = HttpContext.Request.Headers["Authorization"];
             
-            var username = new TokenOperations(_configuration).DecodeToken(token);
-            var data = username;
-            var user = from u in _context.UserTb
-                       where u.Username == username
-                       select u.Username;
+        //    var username = new TokenOperations(_configuration).DecodeToken(token);
+        //    var data = username;
+        //    var user = from u in _context.UserTb
+        //               where u.Username == username
+        //               select u.Username;
             
 
-            if (user != null)
-            {
-                return Ok(token);
-            }
-            else
-            {
-                return BadRequest();
-            }
-        }
+        //    if (user != null)
+        //    {
+        //        return Ok(token);
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
+
+
         /*
         // PUT api/<LoginController>/5
         [HttpPut("{id}")]
