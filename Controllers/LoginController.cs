@@ -11,6 +11,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using System.Net.Http;
 using Newtonsoft.Json;
+using System.IO;
+using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -76,8 +78,7 @@ namespace EmbroidaryManagementSystem.Controllers
                             select new { user.Username, m.Insert, m.Update, m.Delete, m.View }).ToList();
 
                 //HttpContext.Request.Headers["Permissions"] = functions[0].ToString();
-                var userData = functions[0].ToString();
-
+                
                 //Response.Headers.Add("Permissions", functions[0].ToString());
 
                 if (login == null)
@@ -87,7 +88,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 else
                 {
                     //var token = new TokenOperations(_configuration).CreateToken(user.Username);
-                    var token = new TokenOperations(_configuration).CreateToken(userData);
+                    var token = new TokenOperations(_configuration).CreateToken(functions[0].ToString());
                     if (token != null)
                     {
                         return Ok(token);
@@ -113,15 +114,11 @@ namespace EmbroidaryManagementSystem.Controllers
             var token = HttpContext.Request.Headers["Authorization"];
             
             var username = new TokenOperations(_configuration).DecodeToken(token);
+            var data = username;
             var user = from u in _context.UserTb
                        where u.Username == username
                        select u.Username;
-            //var user = await _context.UserTb.FindAsync(username);
-            //var user = _userList.FirstOrDefault(x => x.Email == email);
-            //return user != null ? Ok(user) : BadRequest();
             
-            //var perm = Response.Headers["Permissions"];
-            //var perm = Request.Headers["Permissions"];
 
             if (user != null)
             {
