@@ -79,14 +79,17 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<SaleBillTb>> PostSaleBillTb(SaleBillTb saleBillTb)
         {
-            _context.SaleBillTb.Add(saleBillTb);
+            var max_id = _context.SaleBillTb.Where(data => data.SbId == _context.SaleBillTb.Max(id => id.SbId)).Select(data => data.SbId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            SaleBillTb data = new SaleBillTb { SbId=id, PaId=saleBillTb.PaId, BillNo=saleBillTb.BillNo, Gstno=saleBillTb.Gstno, ChallNo=saleBillTb.ChallNo, Date=saleBillTb.Date, Amount=saleBillTb.Amount, Discount=saleBillTb.Discount, Sgst=saleBillTb.Sgst, Cgst=saleBillTb.Cgst, Igst=saleBillTb.Igst, TotalAmount=saleBillTb.TotalAmount};
+            _context.SaleBillTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (SaleBillTbExists(saleBillTb.SbId))
+                if (SaleBillTbExists(id))
                 {
                     return Conflict();
                 }
@@ -96,7 +99,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return CreatedAtAction("GetSaleBillTb", new { id = saleBillTb.SbId }, saleBillTb);
+            return CreatedAtAction("GetSaleBillTb", id, saleBillTb);
         }
 
         // DELETE: api/SaleBillTbs/5

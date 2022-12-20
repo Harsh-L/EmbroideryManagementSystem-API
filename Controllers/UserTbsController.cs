@@ -79,14 +79,24 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<UserTb>> PostUserTb(UserTb userTb)
         {
-            _context.UserTb.Add(userTb);
+            var max_id = _context.UserTb.Where(data => data.UId == _context.UserTb.Max(id => id.UId)).Select(data => data.UId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            UserTb data = new UserTb { UId=id,
+                                        Name=userTb.Name,
+                                        ContactNo=userTb.ContactNo,
+                                        Username=userTb.Username,
+                                        Email=userTb.Email,
+                                        Password=userTb.Password,
+                                        Dtstamp=userTb.Dtstamp,
+                                        UserRightsId=userTb.UserRightsId};
+            _context.UserTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (UserTbExists(userTb.UId))
+                if (UserTbExists(id))
                 {
                     return Conflict();
                 }
@@ -96,7 +106,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUserTb", new { id = userTb.UId }, userTb);
+            return CreatedAtAction("GetUserTb", id, userTb);
         }
 
         // DELETE: api/UserTbs/5

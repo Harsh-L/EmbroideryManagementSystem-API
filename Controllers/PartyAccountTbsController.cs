@@ -79,14 +79,26 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<PartyAccountTb>> PostPartyAccountTb(PartyAccountTb partyAccountTb)
         {
-            _context.PartyAccountTb.Add(partyAccountTb);
+            var max_id = _context.PartyAccountTb.Where(data => data.PaId == _context.PartyAccountTb.Max(id => id.PaId)).Select(data => data.PaId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            PartyAccountTb data = new PartyAccountTb {PaId=id, 
+                                                        PName=partyAccountTb.PName, 
+                                                        Gstno=partyAccountTb.Gstno, 
+                                                        Aline1=partyAccountTb.Aline1,
+                                                        Aline2=partyAccountTb.Aline2,
+                                                        City=partyAccountTb.City,
+                                                        Pincode=partyAccountTb.Pincode,
+                                                        StateCountry=partyAccountTb.StateCountry,
+                                                        Type=partyAccountTb.Type};
+
+            _context.PartyAccountTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (PartyAccountTbExists(partyAccountTb.PaId))
+                if (PartyAccountTbExists(id))
                 {
                     return Conflict();
                 }
@@ -96,7 +108,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return CreatedAtAction("GetPartyAccountTb", new { id = partyAccountTb.PaId }, partyAccountTb);
+            return CreatedAtAction("GetPartyAccountTb", id, partyAccountTb);
         }
 
         // DELETE: api/PartyAccountTbs/5

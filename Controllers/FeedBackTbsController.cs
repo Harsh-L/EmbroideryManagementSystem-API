@@ -79,14 +79,17 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<FeedBackTb>> PostFeedBackTb(FeedBackTb feedBackTb)
         {
-            _context.FeedBackTb.Add(feedBackTb);
+            var max_id = _context.FeedBackTb.Where(data => data.FbId == _context.FeedBackTb.Max(id => id.FbId)).Select(data => data.FbId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            FeedBackTb data = new FeedBackTb { FbId = id, Name = feedBackTb.Name, Email = feedBackTb.Email, Phone = feedBackTb.Phone, Message = feedBackTb.Message, Time = feedBackTb.Time };
+            _context.FeedBackTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (FeedBackTbExists(feedBackTb.FbId))
+                if (FeedBackTbExists(id))
                 {
                     return Conflict();
                 }
@@ -96,7 +99,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return CreatedAtAction("GetFeedBackTb", new { id = feedBackTb.FbId }, feedBackTb);
+            return CreatedAtAction("GetFeedBackTb", id, feedBackTb);
         }
 
         // DELETE: api/FeedBackTbs/5

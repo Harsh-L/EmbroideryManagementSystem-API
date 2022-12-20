@@ -79,14 +79,18 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<RoleTb>> PostRoleTb(RoleTb roleTb)
         {
-            _context.RoleTb.Add(roleTb);
+            var max_id = _context.RoleTb.Where(data => data.RId == _context.RoleTb.Max(id => id.RId)).Select(data => data.RId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            RoleTb data = new RoleTb {RId=id, Name=roleTb.Name };
+
+            _context.RoleTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (RoleTbExists(roleTb.RId))
+                if (RoleTbExists(id))
                 {
                     return Conflict();
                 }
@@ -96,7 +100,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return CreatedAtAction("GetRoleTb", new { id = roleTb.RId }, roleTb);
+            return CreatedAtAction("GetRoleTb", id, roleTb);
         }
 
         // DELETE: api/RoleTbs/5

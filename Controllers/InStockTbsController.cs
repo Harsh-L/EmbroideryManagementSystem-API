@@ -79,14 +79,17 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<InStockTb>> PostInStockTb(InStockTb inStockTb)
         {
-            _context.InStockTb.Add(inStockTb);
+            var max_id = _context.InStockTb.Where(data => data.InStockId == _context.InStockTb.Max(id => id.InStockId)).Select(data => data.InStockId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            InStockTb data = new InStockTb { InStockId=id,};
+            _context.InStockTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (InStockTbExists(inStockTb.InStockId))
+                if (InStockTbExists(id))
                 {
                     return Conflict();
                 }
@@ -96,7 +99,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return CreatedAtAction("GetInStockTb", new { id = inStockTb.InStockId }, inStockTb);
+            return CreatedAtAction("GetInStockTb", id, inStockTb);
         }
 
         // DELETE: api/InStockTbs/5

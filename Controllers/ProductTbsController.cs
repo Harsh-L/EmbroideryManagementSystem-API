@@ -81,19 +81,20 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductTb>> PostProductTb(ProductTb productTb)
         {
-            var max_id = _context.ProductTb.Where(x => x.PdId == _context.ProductTb.Max(id => id.PdId)).Select(id => id.PdId);
-
+            var max_id = _context.ProductTb.Where(data => data.PdId == _context.ProductTb.Max(id => id.PdId)).Select(data => data.PdId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            ProductTb data = new ProductTb { PdId = id, Name = productTb.Name, Cgst = productTb.Cgst, Igst = productTb.Igst, Sgst = productTb.Sgst, Type = productTb.Type };
             
 
 
-            _context.ProductTb.Add(productTb);
+            _context.ProductTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             { 
-                if (ProductTbExists(productTb.PdId))
+                if (ProductTbExists(id))
                 {
                     return Conflict();
                 }
@@ -103,7 +104,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return CreatedAtAction("GetProductTb", new { id = productTb.PdId }, productTb);
+            return CreatedAtAction("GetProductTb", id, productTb);
         }
 
         // DELETE: api/ProductTbs/5

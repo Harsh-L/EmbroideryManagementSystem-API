@@ -79,14 +79,26 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<PurchaseBillTb>> PostPurchaseBillTb(PurchaseBillTb purchaseBillTb)
         {
-            _context.PurchaseBillTb.Add(purchaseBillTb);
+            var max_id = _context.PurchaseBillTb.Where(data => data.PbId == _context.PurchaseBillTb.Max(id => id.PbId)).Select(data => data.PbId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            PurchaseBillTb data = new PurchaseBillTb { PbId=id, PaId=purchaseBillTb.PaId,
+                                                        ChallNo=purchaseBillTb.ChallNo, 
+                                                        Gstno=purchaseBillTb.Gstno, 
+                                                        Date=purchaseBillTb.Date, 
+                                                        Amount=purchaseBillTb.Amount, 
+                                                        Discount=purchaseBillTb.Discount,
+                                                        Sgst=purchaseBillTb.Sgst,
+                                                        Cgst=purchaseBillTb.Cgst,
+                                                        Igst=purchaseBillTb.Igst,
+                                                        TotalAmount=purchaseBillTb.TotalAmount};
+            _context.PurchaseBillTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (PurchaseBillTbExists(purchaseBillTb.PbId))
+                if (PurchaseBillTbExists(id))
                 {
                     return Conflict();
                 }
@@ -96,7 +108,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return CreatedAtAction("GetPurchaseBillTb", new { id = purchaseBillTb.PbId }, purchaseBillTb);
+            return CreatedAtAction("GetPurchaseBillTb", id, purchaseBillTb);
         }
 
         // DELETE: api/PurchaseBillTbs/5

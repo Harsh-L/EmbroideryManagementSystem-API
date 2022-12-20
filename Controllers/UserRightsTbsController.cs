@@ -79,14 +79,19 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<UserRightsTb>> PostUserRightsTb(UserRightsTb userRightsTb)
         {
-            _context.UserRightsTb.Add(userRightsTb);
+            var max_id = _context.UserRightsTb.Where(data => data.UserRightsId == _context.UserRightsTb.Max(id => id.UserRightsId)).Select(data => data.UserRightsId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            UserRightsTb data = new UserRightsTb { UserRightsId=id,
+                                                    RId=userRightsTb.RId,
+                                                    ModuleId=userRightsTb.ModuleId};
+            _context.UserRightsTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (UserRightsTbExists(userRightsTb.UserRightsId))
+                if (UserRightsTbExists(id))
                 {
                     return Conflict();
                 }
@@ -96,7 +101,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return CreatedAtAction("GetUserRightsTb", new { id = userRightsTb.UserRightsId }, userRightsTb);
+            return CreatedAtAction("GetUserRightsTb", id, userRightsTb);
         }
 
         // DELETE: api/UserRightsTbs/5

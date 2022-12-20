@@ -79,24 +79,28 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<ModuleMasterTb>> PostModuleMasterTb(ModuleMasterTb moduleMasterTb)
         {
-            _context.ModuleMasterTb.Add(moduleMasterTb);
+            var max_id = _context.ModuleMasterTb.Where(data => data.ModuleId == _context.ModuleMasterTb.Max(id => id.ModuleId)).Select(data => data.ModuleId).ToList();
+            int id = Convert.ToInt32(max_id[0]) + 1;
+            ModuleMasterTb data = new ModuleMasterTb {ModuleId=id, Name=moduleMasterTb.Name, Insert=moduleMasterTb.Insert, Update=moduleMasterTb.Update, Delete=moduleMasterTb.Delete, View=moduleMasterTb.View};
+
+            _context.ModuleMasterTb.Add(data);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
             {
-                if (ModuleMasterTbExists(moduleMasterTb.ModuleId))
+                if (ModuleMasterTbExists(id))
                 {
                     return Conflict();
                 }
                 else
                 {
                     throw;
-                }
+                } 
             }
 
-            return CreatedAtAction("GetModuleMasterTb", new { id = moduleMasterTb.ModuleId }, moduleMasterTb);
+            return CreatedAtAction("GetModuleMasterTb", id, moduleMasterTb);
         }
 
         // DELETE: api/ModuleMasterTbs/5
