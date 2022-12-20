@@ -70,7 +70,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/ModuleMasterTbs

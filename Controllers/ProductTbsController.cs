@@ -72,7 +72,7 @@ namespace EmbroidaryManagementSystem.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok();
         }
 
         // POST: api/ProductTbs
@@ -81,13 +81,18 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductTb>> PostProductTb(ProductTb productTb)
         {
+            var max_id = _context.ProductTb.Where(x => x.PdId == _context.ProductTb.Max(id => id.PdId)).Select(id => id.PdId);
+
+            
+
+
             _context.ProductTb.Add(productTb);
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateException)
-            {
+            { 
                 if (ProductTbExists(productTb.PdId))
                 {
                     return Conflict();
