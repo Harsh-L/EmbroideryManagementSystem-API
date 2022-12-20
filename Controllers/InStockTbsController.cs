@@ -79,9 +79,22 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<InStockTb>> PostInStockTb(InStockTb inStockTb)
         {
-            var max_id = _context.InStockTb.Where(data => data.InStockId == _context.InStockTb.Max(id => id.InStockId)).Select(data => data.InStockId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            InStockTb data = new InStockTb { InStockId=id,};
+            List<int> max_id;
+            int id;
+            InStockTb data;
+            try
+            {
+                max_id = _context.InStockTb.Where(data => data.InStockId == _context.InStockTb.Max(id => id.InStockId)).Select(data => data.InStockId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new InStockTb { InStockId=id, PaId=inStockTb.PaId, ChallNo=inStockTb.ChallNo, Gstno=inStockTb.Gstno, Date=inStockTb.Date, Amount=inStockTb.Amount, Discount=inStockTb.Discount, Sgst=inStockTb.Sgst, Cgst=inStockTb.Cgst, Igst=inStockTb.Igst, TotalAmount=inStockTb.TotalAmount};
+
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new InStockTb { InStockId = id, PaId = inStockTb.PaId, ChallNo = inStockTb.ChallNo, Gstno = inStockTb.Gstno, Date = inStockTb.Date, Amount = inStockTb.Amount, Discount = inStockTb.Discount, Sgst = inStockTb.Sgst, Cgst = inStockTb.Cgst, Igst = inStockTb.Igst, TotalAmount = inStockTb.TotalAmount };
+                throw;
+            }
             _context.InStockTb.Add(data);
             try
             {

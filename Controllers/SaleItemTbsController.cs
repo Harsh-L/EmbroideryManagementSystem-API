@@ -79,19 +79,48 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<SaleItemTb>> PostSaleItemTb(SaleItemTb saleItemTb)
         {
-            var max_id = _context.SaleItemTb.Where(data => data.SiId== _context.SaleItemTb.Max(id => id.SiId)).Select(data => data.SiId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            SaleItemTb data = new SaleItemTb { SiId=id,
-                                                BillNo=saleItemTb.BillNo,
-                                                Name=saleItemTb.Name,
-                                                Design=saleItemTb.Design,
-                                                Work=saleItemTb.Work,
-                                                Plain=saleItemTb.Plain,
-                                                Rate=saleItemTb.Rate,
-                                                Amount=saleItemTb.Amount,
-                                                Sgst=saleItemTb.Sgst,
-                                                Cgst=saleItemTb.Sgst,
-                                                Igst=saleItemTb.Igst};
+            List<int> max_id;
+            int id;
+            SaleItemTb data;
+            try
+            {
+                max_id = _context.SaleItemTb.Where(data => data.SiId == _context.SaleItemTb.Max(id => id.SiId)).Select(data => data.SiId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new SaleItemTb
+                {
+                    SiId = id,
+                    BillNo = saleItemTb.BillNo,
+                    Name = saleItemTb.Name,
+                    Design = saleItemTb.Design,
+                    Work = saleItemTb.Work,
+                    Plain = saleItemTb.Plain,
+                    Rate = saleItemTb.Rate,
+                    Amount = saleItemTb.Amount,
+                    Sgst = saleItemTb.Sgst,
+                    Cgst = saleItemTb.Sgst,
+                    Igst = saleItemTb.Igst
+                };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new SaleItemTb
+                {
+                    SiId = id,
+                    BillNo = saleItemTb.BillNo,
+                    Name = saleItemTb.Name,
+                    Design = saleItemTb.Design,
+                    Work = saleItemTb.Work,
+                    Plain = saleItemTb.Plain,
+                    Rate = saleItemTb.Rate,
+                    Amount = saleItemTb.Amount,
+                    Sgst = saleItemTb.Sgst,
+                    Cgst = saleItemTb.Sgst,
+                    Igst = saleItemTb.Igst
+                };
+                
+            }
+            
             _context.SaleItemTb.Add(data);
             try
             {

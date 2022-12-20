@@ -79,9 +79,22 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<FeedBackTb>> PostFeedBackTb(FeedBackTb feedBackTb)
         {
-            var max_id = _context.FeedBackTb.Where(data => data.FbId == _context.FeedBackTb.Max(id => id.FbId)).Select(data => data.FbId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            FeedBackTb data = new FeedBackTb { FbId = id, Name = feedBackTb.Name, Email = feedBackTb.Email, Phone = feedBackTb.Phone, Message = feedBackTb.Message, Time = feedBackTb.Time };
+            List<int> max_id;
+            int id;
+            FeedBackTb data;
+            try
+            {
+                max_id = _context.FeedBackTb.Where(data => data.FbId == _context.FeedBackTb.Max(id => id.FbId)).Select(data => data.FbId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new FeedBackTb { FbId = id, Name = feedBackTb.Name, Email = feedBackTb.Email, Phone = feedBackTb.Phone, Message = feedBackTb.Message, Time = feedBackTb.Time };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new FeedBackTb { FbId = id, Name = feedBackTb.Name, Email = feedBackTb.Email, Phone = feedBackTb.Phone, Message = feedBackTb.Message, Time = feedBackTb.Time };
+                
+            }
+            
             _context.FeedBackTb.Add(data);
             try
             {

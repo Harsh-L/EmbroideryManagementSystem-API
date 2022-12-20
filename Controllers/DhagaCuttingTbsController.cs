@@ -79,9 +79,20 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<DhagaCuttingTb>> PostDhagaCuttingTb(DhagaCuttingTb dhagaCuttingTb)
         {
-            var max_id = _context.DhagaCuttingTb.Where(data => data.DcId == _context.DhagaCuttingTb.Max(id => id.DcId)).Select(data => data.DcId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            DhagaCuttingTb data = new DhagaCuttingTb { DcId=id, Name=dhagaCuttingTb.Name, EmpId=dhagaCuttingTb.EmpId, Date=dhagaCuttingTb.Date, Saree=dhagaCuttingTb.Saree, Price=dhagaCuttingTb.Price, Total=dhagaCuttingTb.Total};
+            List<int> max_id;
+            int id;
+            DhagaCuttingTb data;
+            try
+            {
+                max_id = _context.DhagaCuttingTb.Where(data => data.DcId == _context.DhagaCuttingTb.Max(id => id.DcId)).Select(data => data.DcId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new DhagaCuttingTb { DcId = id, Name = dhagaCuttingTb.Name, EmpId = dhagaCuttingTb.EmpId, Date = dhagaCuttingTb.Date, Saree = dhagaCuttingTb.Saree, Price = dhagaCuttingTb.Price, Total = dhagaCuttingTb.Total };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new DhagaCuttingTb { DcId = id, Name = dhagaCuttingTb.Name, EmpId = dhagaCuttingTb.EmpId, Date = dhagaCuttingTb.Date, Saree = dhagaCuttingTb.Saree, Price = dhagaCuttingTb.Price, Total = dhagaCuttingTb.Total };
+            }
 
             _context.DhagaCuttingTb.Add(data);
             try

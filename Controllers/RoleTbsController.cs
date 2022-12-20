@@ -79,9 +79,21 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<RoleTb>> PostRoleTb(RoleTb roleTb)
         {
-            var max_id = _context.RoleTb.Where(data => data.RId == _context.RoleTb.Max(id => id.RId)).Select(data => data.RId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            RoleTb data = new RoleTb {RId=id, Name=roleTb.Name };
+            List<int> max_id;
+            int id;
+            RoleTb data;
+            try
+            {
+                max_id = _context.RoleTb.Where(data => data.RId == _context.RoleTb.Max(id => id.RId)).Select(data => data.RId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new RoleTb { RId = id, Name = roleTb.Name };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new RoleTb { RId = id, Name = roleTb.Name };
+            }
+            
 
             _context.RoleTb.Add(data);
             try

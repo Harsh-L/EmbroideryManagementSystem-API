@@ -79,17 +79,45 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<PurchaseItemTb>> PostPurchaseItemTb(PurchaseItemTb purchaseItemTb)
         {
-            var max_id = _context.PurchaseItemTb.Where(data => data.PiId == _context.PurchaseItemTb.Max(id => id.PiId)).Select(data => data.PiId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            PurchaseItemTb data = new PurchaseItemTb { PiId=id, Name=purchaseItemTb.Name, 
-                                                        Design=purchaseItemTb.Design, 
-                                                        Quantity=purchaseItemTb.Quantity, 
-                                                        Rate=purchaseItemTb.Rate,
-                                                        Amount=purchaseItemTb.Amount,
-                                                        ChallNo=purchaseItemTb.ChallNo,
-                                                        Sgst=purchaseItemTb.Sgst,
-                                                        Cgst=purchaseItemTb.Cgst,
-                                                        Igst=purchaseItemTb.Igst};
+            List<int> max_id;
+            int id;
+            PurchaseItemTb data;
+            try
+            {
+                max_id = _context.PurchaseItemTb.Where(data => data.PiId == _context.PurchaseItemTb.Max(id => id.PiId)).Select(data => data.PiId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new PurchaseItemTb
+                {
+                    PiId = id,
+                    Name = purchaseItemTb.Name,
+                    Design = purchaseItemTb.Design,
+                    Quantity = purchaseItemTb.Quantity,
+                    Rate = purchaseItemTb.Rate,
+                    Amount = purchaseItemTb.Amount,
+                    ChallNo = purchaseItemTb.ChallNo,
+                    Sgst = purchaseItemTb.Sgst,
+                    Cgst = purchaseItemTb.Cgst,
+                    Igst = purchaseItemTb.Igst
+                };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new PurchaseItemTb
+                {
+                    PiId = id,
+                    Name = purchaseItemTb.Name,
+                    Design = purchaseItemTb.Design,
+                    Quantity = purchaseItemTb.Quantity,
+                    Rate = purchaseItemTb.Rate,
+                    Amount = purchaseItemTb.Amount,
+                    ChallNo = purchaseItemTb.ChallNo,
+                    Sgst = purchaseItemTb.Sgst,
+                    Cgst = purchaseItemTb.Cgst,
+                    Igst = purchaseItemTb.Igst
+                };
+            }
+            
             _context.PurchaseItemTb.Add(data);
             try
             {

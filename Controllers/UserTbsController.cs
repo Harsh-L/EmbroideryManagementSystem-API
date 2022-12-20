@@ -79,16 +79,42 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<UserTb>> PostUserTb(UserTb userTb)
         {
-            var max_id = _context.UserTb.Where(data => data.UId == _context.UserTb.Max(id => id.UId)).Select(data => data.UId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            UserTb data = new UserTb { UId=id,
-                                        Name=userTb.Name,
-                                        ContactNo=userTb.ContactNo,
-                                        Username=userTb.Username,
-                                        Email=userTb.Email,
-                                        Password=userTb.Password,
-                                        Dtstamp=userTb.Dtstamp,
-                                        UserRightsId=userTb.UserRightsId};
+            List<int> max_id;
+            int id;
+            UserTb data;
+            try
+            {
+                max_id = _context.UserTb.Where(data => data.UId == _context.UserTb.Max(id => id.UId)).Select(data => data.UId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new UserTb
+                {
+                    UId = id,
+                    Name = userTb.Name,
+                    ContactNo = userTb.ContactNo,
+                    Username = userTb.Username,
+                    Email = userTb.Email,
+                    Password = userTb.Password,
+                    Dtstamp = userTb.Dtstamp,
+                    UserRightsId = userTb.UserRightsId
+                };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new UserTb
+                {
+                    UId = id,
+                    Name = userTb.Name,
+                    ContactNo = userTb.ContactNo,
+                    Username = userTb.Username,
+                    Email = userTb.Email,
+                    Password = userTb.Password,
+                    Dtstamp = userTb.Dtstamp,
+                    UserRightsId = userTb.UserRightsId
+                };
+                
+            }
+            
             _context.UserTb.Add(data);
             try
             {

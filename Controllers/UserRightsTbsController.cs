@@ -79,11 +79,32 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<UserRightsTb>> PostUserRightsTb(UserRightsTb userRightsTb)
         {
-            var max_id = _context.UserRightsTb.Where(data => data.UserRightsId == _context.UserRightsTb.Max(id => id.UserRightsId)).Select(data => data.UserRightsId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            UserRightsTb data = new UserRightsTb { UserRightsId=id,
-                                                    RId=userRightsTb.RId,
-                                                    ModuleId=userRightsTb.ModuleId};
+            List<int> max_id;
+            int id;
+            UserRightsTb data;
+            try
+            {
+                max_id = _context.UserRightsTb.Where(data => data.UserRightsId == _context.UserRightsTb.Max(id => id.UserRightsId)).Select(data => data.UserRightsId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new UserRightsTb
+                {
+                    UserRightsId = id,
+                    RId = userRightsTb.RId,
+                    ModuleId = userRightsTb.ModuleId
+                };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new UserRightsTb
+                {
+                    UserRightsId = id,
+                    RId = userRightsTb.RId,
+                    ModuleId = userRightsTb.ModuleId
+                };
+                
+            }
+            
             _context.UserRightsTb.Add(data);
             try
             {

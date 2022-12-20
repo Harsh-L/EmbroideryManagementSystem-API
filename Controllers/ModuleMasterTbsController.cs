@@ -79,9 +79,21 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<ModuleMasterTb>> PostModuleMasterTb(ModuleMasterTb moduleMasterTb)
         {
-            var max_id = _context.ModuleMasterTb.Where(data => data.ModuleId == _context.ModuleMasterTb.Max(id => id.ModuleId)).Select(data => data.ModuleId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            ModuleMasterTb data = new ModuleMasterTb {ModuleId=id, Name=moduleMasterTb.Name, Insert=moduleMasterTb.Insert, Update=moduleMasterTb.Update, Delete=moduleMasterTb.Delete, View=moduleMasterTb.View};
+            List<int> max_id;
+            int id;
+            ModuleMasterTb data;
+            try
+            {
+                max_id = _context.ModuleMasterTb.Where(data => data.ModuleId == _context.ModuleMasterTb.Max(id => id.ModuleId)).Select(data => data.ModuleId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new ModuleMasterTb {ModuleId=id, Name=moduleMasterTb.Name, Insert=moduleMasterTb.Insert, Update=moduleMasterTb.Update, Delete=moduleMasterTb.Delete, View=moduleMasterTb.View};
+
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new ModuleMasterTb { ModuleId = id, Name = moduleMasterTb.Name, Insert = moduleMasterTb.Insert, Update = moduleMasterTb.Update, Delete = moduleMasterTb.Delete, View = moduleMasterTb.View };
+            }
 
             _context.ModuleMasterTb.Add(data);
             try

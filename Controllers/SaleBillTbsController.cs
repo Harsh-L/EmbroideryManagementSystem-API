@@ -79,9 +79,21 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<SaleBillTb>> PostSaleBillTb(SaleBillTb saleBillTb)
         {
-            var max_id = _context.SaleBillTb.Where(data => data.SbId == _context.SaleBillTb.Max(id => id.SbId)).Select(data => data.SbId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            SaleBillTb data = new SaleBillTb { SbId=id, PaId=saleBillTb.PaId, BillNo=saleBillTb.BillNo, Gstno=saleBillTb.Gstno, ChallNo=saleBillTb.ChallNo, Date=saleBillTb.Date, Amount=saleBillTb.Amount, Discount=saleBillTb.Discount, Sgst=saleBillTb.Sgst, Cgst=saleBillTb.Cgst, Igst=saleBillTb.Igst, TotalAmount=saleBillTb.TotalAmount};
+            List<int> max_id;
+            int id;
+            SaleBillTb data;
+            try
+            {
+                max_id = _context.SaleBillTb.Where(data => data.SbId == _context.SaleBillTb.Max(id => id.SbId)).Select(data => data.SbId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new SaleBillTb { SbId = id, PaId = saleBillTb.PaId, BillNo = saleBillTb.BillNo, Gstno = saleBillTb.Gstno, ChallNo = saleBillTb.ChallNo, Date = saleBillTb.Date, Amount = saleBillTb.Amount, Discount = saleBillTb.Discount, Sgst = saleBillTb.Sgst, Cgst = saleBillTb.Cgst, Igst = saleBillTb.Igst, TotalAmount = saleBillTb.TotalAmount };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new SaleBillTb { SbId = id, PaId = saleBillTb.PaId, BillNo = saleBillTb.BillNo, Gstno = saleBillTb.Gstno, ChallNo = saleBillTb.ChallNo, Date = saleBillTb.Date, Amount = saleBillTb.Amount, Discount = saleBillTb.Discount, Sgst = saleBillTb.Sgst, Cgst = saleBillTb.Cgst, Igst = saleBillTb.Igst, TotalAmount = saleBillTb.TotalAmount };
+            }
+            
             _context.SaleBillTb.Add(data);
             try
             {

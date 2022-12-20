@@ -79,9 +79,21 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<EmployeeTb>> PostEmployeeTb(EmployeeTb employeeTb)
         {
-            var max_id = _context.EmployeeTb.Where(data => data.EmpId == _context.EmployeeTb.Max(id => id.EmpId)).Select(data => data.EmpId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            EmployeeTb data = new EmployeeTb { EmpId=id, Name=employeeTb.Name, Aadhar=employeeTb.Aadhar ,Category=employeeTb.Category, Phone=employeeTb.Phone };
+            List<int> max_id;
+            int id;
+            EmployeeTb data;
+            try
+            {
+                max_id = _context.EmployeeTb.Where(data => data.EmpId == _context.EmployeeTb.Max(id => id.EmpId)).Select(data => data.EmpId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new EmployeeTb { EmpId=id, Name=employeeTb.Name, Aadhar=employeeTb.Aadhar ,Category=employeeTb.Category, Phone=employeeTb.Phone };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new EmployeeTb { EmpId = id, Name = employeeTb.Name, Aadhar = employeeTb.Aadhar, Category = employeeTb.Category, Phone = employeeTb.Phone };
+            }
+
             _context.EmployeeTb.Add(data);
             try
             {

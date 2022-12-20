@@ -79,18 +79,47 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<PurchaseBillTb>> PostPurchaseBillTb(PurchaseBillTb purchaseBillTb)
         {
-            var max_id = _context.PurchaseBillTb.Where(data => data.PbId == _context.PurchaseBillTb.Max(id => id.PbId)).Select(data => data.PbId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            PurchaseBillTb data = new PurchaseBillTb { PbId=id, PaId=purchaseBillTb.PaId,
-                                                        ChallNo=purchaseBillTb.ChallNo, 
-                                                        Gstno=purchaseBillTb.Gstno, 
-                                                        Date=purchaseBillTb.Date, 
-                                                        Amount=purchaseBillTb.Amount, 
-                                                        Discount=purchaseBillTb.Discount,
-                                                        Sgst=purchaseBillTb.Sgst,
-                                                        Cgst=purchaseBillTb.Cgst,
-                                                        Igst=purchaseBillTb.Igst,
-                                                        TotalAmount=purchaseBillTb.TotalAmount};
+            List<int> max_id;
+            int id;
+            PurchaseBillTb data;
+            try
+            {
+                max_id = _context.PurchaseBillTb.Where(data => data.PbId == _context.PurchaseBillTb.Max(id => id.PbId)).Select(data => data.PbId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new PurchaseBillTb
+                {
+                    PbId = id,
+                    PaId = purchaseBillTb.PaId,
+                    ChallNo = purchaseBillTb.ChallNo,
+                    Gstno = purchaseBillTb.Gstno,
+                    Date = purchaseBillTb.Date,
+                    Amount = purchaseBillTb.Amount,
+                    Discount = purchaseBillTb.Discount,
+                    Sgst = purchaseBillTb.Sgst,
+                    Cgst = purchaseBillTb.Cgst,
+                    Igst = purchaseBillTb.Igst,
+                    TotalAmount = purchaseBillTb.TotalAmount
+                };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new PurchaseBillTb
+                {
+                    PbId = id,
+                    PaId = purchaseBillTb.PaId,
+                    ChallNo = purchaseBillTb.ChallNo,
+                    Gstno = purchaseBillTb.Gstno,
+                    Date = purchaseBillTb.Date,
+                    Amount = purchaseBillTb.Amount,
+                    Discount = purchaseBillTb.Discount,
+                    Sgst = purchaseBillTb.Sgst,
+                    Cgst = purchaseBillTb.Cgst,
+                    Igst = purchaseBillTb.Igst,
+                    TotalAmount = purchaseBillTb.TotalAmount
+                };
+            }
+            
             _context.PurchaseBillTb.Add(data);
             try
             {

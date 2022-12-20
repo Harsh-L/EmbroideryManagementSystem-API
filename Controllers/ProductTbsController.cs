@@ -81,12 +81,22 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<ProductTb>> PostProductTb(ProductTb productTb)
         {
-            var max_id = _context.ProductTb.Where(data => data.PdId == _context.ProductTb.Max(id => id.PdId)).Select(data => data.PdId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            ProductTb data = new ProductTb { PdId = id, Name = productTb.Name, Cgst = productTb.Cgst, Igst = productTb.Igst, Sgst = productTb.Sgst, Type = productTb.Type };
+            List<int> max_id;
+            int id;
+            ProductTb data;
+
+            try
+            {
+                max_id = _context.ProductTb.Where(data => data.PdId == _context.ProductTb.Max(id => id.PdId)).Select(data => data.PdId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new ProductTb { PdId = id, Name = productTb.Name, Cgst = productTb.Cgst, Igst = productTb.Igst, Sgst = productTb.Sgst, Type = productTb.Type };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new ProductTb { PdId = id, Name = productTb.Name, Cgst = productTb.Cgst, Igst = productTb.Igst, Sgst = productTb.Sgst, Type = productTb.Type };
+            }
             
-
-
             _context.ProductTb.Add(data);
             try
             {

@@ -79,17 +79,42 @@ namespace EmbroidaryManagementSystem.Controllers
         [HttpPost]
         public async Task<ActionResult<PartyAccountTb>> PostPartyAccountTb(PartyAccountTb partyAccountTb)
         {
-            var max_id = _context.PartyAccountTb.Where(data => data.PaId == _context.PartyAccountTb.Max(id => id.PaId)).Select(data => data.PaId).ToList();
-            int id = Convert.ToInt32(max_id[0]) + 1;
-            PartyAccountTb data = new PartyAccountTb {PaId=id, 
-                                                        PName=partyAccountTb.PName, 
-                                                        Gstno=partyAccountTb.Gstno, 
-                                                        Aline1=partyAccountTb.Aline1,
-                                                        Aline2=partyAccountTb.Aline2,
-                                                        City=partyAccountTb.City,
-                                                        Pincode=partyAccountTb.Pincode,
-                                                        StateCountry=partyAccountTb.StateCountry,
-                                                        Type=partyAccountTb.Type};
+            List<int> max_id;
+            int id;
+            PartyAccountTb data;
+            try
+            {
+                max_id = _context.PartyAccountTb.Where(data => data.PaId == _context.PartyAccountTb.Max(id => id.PaId)).Select(data => data.PaId).ToList();
+                id = Convert.ToInt32(max_id[0]) + 1;
+                data = new PartyAccountTb
+                {
+                    PaId = id,
+                    PName = partyAccountTb.PName,
+                    Gstno = partyAccountTb.Gstno,
+                    Aline1 = partyAccountTb.Aline1,
+                    Aline2 = partyAccountTb.Aline2,
+                    City = partyAccountTb.City,
+                    Pincode = partyAccountTb.Pincode,
+                    StateCountry = partyAccountTb.StateCountry,
+                    Type = partyAccountTb.Type
+                };
+            }
+            catch (Exception)
+            {
+                id = 101;
+                data = new PartyAccountTb
+                {
+                    PaId = id,
+                    PName = partyAccountTb.PName,
+                    Gstno = partyAccountTb.Gstno,
+                    Aline1 = partyAccountTb.Aline1,
+                    Aline2 = partyAccountTb.Aline2,
+                    City = partyAccountTb.City,
+                    Pincode = partyAccountTb.Pincode,
+                    StateCountry = partyAccountTb.StateCountry,
+                    Type = partyAccountTb.Type
+                };
+            }
 
             _context.PartyAccountTb.Add(data);
             try
