@@ -91,6 +91,7 @@ namespace EmbroidaryManagementSystem.Controllers
                                                     Name=inStockItemTb.Name, 
                                                     Quantity=inStockItemTb.Quantity, 
                                                     Rate=inStockItemTb.Rate, 
+                                                    Amount=inStockItemTb.Amount, 
                                                     Sgst=inStockItemTb.Sgst, 
                                                     Cgst=inStockItemTb.Cgst, 
                                                     Igst=inStockItemTb.Igst};
@@ -106,6 +107,7 @@ namespace EmbroidaryManagementSystem.Controllers
                     Name = inStockItemTb.Name,
                     Quantity = inStockItemTb.Quantity,
                     Rate = inStockItemTb.Rate,
+                    Amount = inStockItemTb.Amount,
                     Sgst = inStockItemTb.Sgst,
                     Cgst = inStockItemTb.Cgst,
                     Igst = inStockItemTb.Igst
